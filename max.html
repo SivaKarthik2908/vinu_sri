@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Message from Max! 🏎️</title>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; image-rendering: pixelated; }
+
+  :root {
+    --pink-bg: #fce4f0;
+    --deep-pink: #d4547a;
+    --hot-pink: #e8739a;
+    --gold: #c9a84c;
+    --gold-light: #f0d080;
+    --text-dark: #7a1040;
+    --white: #fff8fc;
+    --btn-shadow: #a03058;
+    --rb-blue: #0600ef;
+    --rb-red: #ff1801;
+  }
+
+  body {
+    background-color: #fce4f0;
+    background-image:
+      linear-gradient(rgba(232,115,154,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,115,154,0.07) 1px, transparent 1px);
+    background-size: 16px 16px;
+    min-height: 100vh;
+    font-family: 'Silkscreen', monospace;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 50px;
+  }
+
+  /* ── PIXEL CORNER BORDER ── */
+  .px-border {
+    position: fixed;
+    inset: 10px;
+    border: 3px solid rgba(212,84,122,0.18);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .px-border::before {
+    content: '';
+    position: absolute;
+    top: -5px; left: -5px;
+    width: 10px; height: 10px;
+    background: var(--deep-pink);
+    opacity: 0.4;
+  }
+  .px-border::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; right: -5px;
+    width: 10px; height: 10px;
+    background: var(--deep-pink);
+    opacity: 0.4;
+  }
+
+  /* ── BACK BUTTON ── */
+  .back-btn {
+    align-self: flex-start;
+    font-family: 'Silkscreen', monospace;
+    font-size: 0.55rem;
+    color: var(--deep-pink);
+    text-decoration: none;
+    padding: 8px 14px;
+    background: var(--white);
+    border-top: 3px solid #ffd6e7;
+    border-left: 3px solid #ffd6e7;
+    border-right: 3px solid var(--btn-shadow);
+    border-bottom: 3px solid var(--btn-shadow);
+    box-shadow: 3px 3px 0 #7a1040;
+    margin-bottom: 20px;
+    letter-spacing: 0.08em;
+    transition: transform 0.1s steps(1), box-shadow 0.1s steps(1);
+    position: relative; z-index: 2;
+  }
+  .back-btn:hover { transform: translate(2px,2px); box-shadow: 1px 1px 0 #7a1040; }
+
+  /* ── PAGE TITLE ── */
+  .page-title {
+    font-size: clamp(0.55rem, 2.5vw, 0.8rem);
+    color: var(--deep-pink);
+    letter-spacing: 0.12em;
+    margin-bottom: 28px;
+    text-align: center;
+    position: relative; z-index: 2;
+    opacity: 0;
+    animation: pixelIn 0.4s steps(1) 0.2s forwards;
+  }
+
+  @keyframes pixelIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ══════════════════════════
+     SCENE WRAPPER
+  ══════════════════════════ */
+  .scene {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    position: relative; z-index: 2;
+  }
+
+  /* ── MAX SPRITE ── */
+  .sprite-wrap {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    padding-left: 20px;
+    opacity: 0;
+    animation: slideUp 0.5s steps(4) 0.4s forwards;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .max-sprite {
+    width: clamp(110px, 30vw, 150px);
+    height: auto;
+    display: block;
+    filter: drop-shadow(4px 0 0 rgba(212,84,122,0.2));
+  }
+
+  /* Name badge above sprite */
+  .sprite-name {
+    display: inline-block;
+    background: var(--rb-blue);
+    color: #ffffff;
+    font-size: 0.42rem;
+    letter-spacing: 0.12em;
+    padding: 4px 10px;
+    margin-bottom: 6px;
+    border-top: 2px solid #4444ff;
+    border-left: 2px solid #4444ff;
+    border-right: 2px solid #000080;
+    border-bottom: 2px solid #000080;
+    box-shadow: 2px 2px 0 #000050;
+  }
+
+  .sprite-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* ── DIALOGUE BOX ── */
+  .dialogue-box {
+    width: 100%;
+    background: var(--white);
+    border-top: 4px solid #ffd6e7;
+    border-left: 4px solid #ffd6e7;
+    border-right: 4px solid var(--btn-shadow);
+    border-bottom: 4px solid var(--btn-shadow);
+    box-shadow: 5px 5px 0 #7a1040;
+    padding: 18px 18px 14px;
+    position: relative;
+    opacity: 0;
+    animation: pixelIn 0.4s steps(1) 0.8s forwards;
+  }
+
+  /* Triangle pointer pointing to Max (bottom-left) */
+  .dialogue-box::before {
+    content: '';
+    position: absolute;
+    top: -14px;
+    left: 36px;
+    width: 0; height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 14px solid var(--btn-shadow);
+  }
+
+  .dialogue-box::after {
+    content: '';
+    position: absolute;
+    top: -9px;
+    left: 38px;
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 10px solid var(--white);
+  }
+
+  /* Speaker label inside box */
+  .speaker-tag {
+    font-size: 0.42rem;
+    color: var(--rb-blue);
+    letter-spacing: 0.15em;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #f4c8d8;
+    padding-bottom: 6px;
+  }
+
+  /* Typewriter text */
+  .dialogue-text {
+    font-size: clamp(0.42rem, 1.8vw, 0.58rem);
+    color: var(--text-dark);
+    letter-spacing: 0.06em;
+    line-height: 2.2;
+    min-height: 6em;
+  }
+
+  .dialogue-text .cursor-blink {
+    display: inline-block;
+    width: 8px; height: 1em;
+    background: var(--deep-pink);
+    vertical-align: text-bottom;
+    animation: blink 0.7s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    0%,49% { opacity: 1; }
+    50%,100% { opacity: 0; }
+  }
+
+  /* ── NEXT / TAP INDICATOR ── */
+  .next-indicator {
+    text-align: right;
+    margin-top: 10px;
+    font-size: 0.4rem;
+    color: var(--deep-pink);
+    letter-spacing: 0.1em;
+    opacity: 0;
+    transition: opacity 0.2s steps(1);
+    cursor: pointer;
+    animation: arrowBounce 0.8s steps(2) infinite;
+  }
+
+  .next-indicator.visible { opacity: 1; }
+
+  @keyframes arrowBounce {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(3px); }
+  }
+
+  /* ── STATS CARD ── */
+  .stats-card {
+    width: 100%;
+    background: var(--white);
+    border-top: 4px solid #ffd6e7;
+    border-left: 4px solid #ffd6e7;
+    border-right: 4px solid var(--btn-shadow);
+    border-bottom: 4px solid var(--btn-shadow);
+    box-shadow: 5px 5px 0 #7a1040;
+    padding: 16px 18px;
+    margin-top: 16px;
+    opacity: 0;
+    transition: opacity 0.3s steps(3);
+  }
+
+  .stats-card.visible { opacity: 1; }
+
+  .stats-header {
+    font-size: 0.45rem;
+    color: var(--rb-blue);
+    letter-spacing: 0.15em;
+    border-bottom: 2px solid #f4c8d8;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat-item {
+    background: #fce4f0;
+    border-top: 2px solid #ffd6e7;
+    border-left: 2px solid #ffd6e7;
+    border-right: 2px solid #c06080;
+    border-bottom: 2px solid #c06080;
+    padding: 8px 10px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-size: clamp(0.8rem, 3vw, 1.1rem);
+    color: var(--deep-pink);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .stat-lbl {
+    font-size: 0.35rem;
+    color: var(--text-dark);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── F1 STRIPE ── */
+  .f1-stripe {
+    width: 100%;
+    height: 8px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--rb-red) 0px, var(--rb-red) 12px,
+      var(--rb-blue) 12px, var(--rb-blue) 24px,
+      var(--gold-light) 24px, var(--gold-light) 36px,
+      var(--rb-blue) 36px, var(--rb-blue) 48px
+    );
+    margin-top: 16px;
+    box-shadow: 0 2px 0 #7a1040;
+  }
+
+  /* ── REPLAY BTN ── */
+  .replay-btn {
+    font-family: 'Silkscreen', monospace;
+    font-size: 0.5rem;
+    color: var(--white);
+    background: var(--deep-pink);
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-top: 3px solid #f4a7c3;
+    border-left: 3px solid #f4a7c3;
+    border-right: 3px solid #7a1040;
+    border-bottom: 3px solid #7a1040;
+    box-shadow: 4px 4px 0 #4a0820;
+    letter-spacing: 0.1em;
+    margin-top: 18px;
+    transition: transform 0.1s steps(1), box-shadow 0.1s steps(1);
+    opacity: 0;
+    display: none;
+  }
+
+  .replay-btn.visible {
+    display: block;
+    opacity: 1;
+  }
+
+  .replay-btn:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 #4a0820; }
+  .replay-btn:active { transform: translate(4px,4px); box-shadow: none; }
+</style>
+</head>
+<body>
+
+<div class="px-border"></div>
+
+<a href="index.html" class="back-btn">← BACK</a>
+
+<div class="page-title">★ SPECIAL MESSAGE FOR VINU SRI ★</div>
+
+<div class="scene">
+
+  <!-- Max sprite -->
+  <div class="sprite-wrap">
+    <div class="sprite-col">
+      <span class="sprite-name">MAX VERSTAPPEN #1</span>
+      <img class="max-sprite" src="max.png" alt="Max Verstappen"
+        onerror="this.outerHTML='<div style=\'font-size:90px;line-height:1;\'>🏎️</div>'">
+    </div>
+  </div>
+
+  <!-- Dialogue box -->
+  <div class="dialogue-box" id="dialogueBox">
+    <div class="speaker-tag">MAX VERSTAPPEN</div>
+    <div class="dialogue-text" id="dialogueText"></div>
+    <div class="next-indicator" id="nextIndicator">▼ TAP TO CONTINUE</div>
+  </div>
+
+  <!-- Stats card -->
+  <div class="stats-card" id="statsCard">
+    <div class="stats-header">📊 MAX'S STATS</div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-val">4x</span>
+        <span class="stat-lbl">WORLD TITLES</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val">62+</span>
+        <span class="stat-lbl">RACE WINS</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val">#1</span>
+        <span class="stat-lbl">CURRENT RANK</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val">🏆</span>
+        <span class="stat-lbl">UNSTOPPABLE</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="f1-stripe"></div>
+
+  <button class="replay-btn" id="replayBtn" onclick="startDialogue()">↺ REPLAY MESSAGE</button>
+
+</div>
+
+<script>
+  // ═══════════════════════════════════
+  // DIALOGUE LINES
+  // ═══════════════════════════════════
+  const LINES = [
+    "HEY VINU SRI!",
+    "I HEARD IT'S YOUR BIRTHDAY TODAY.",
+    "YOU KNOW, WINNING FOUR WORLD\nCHAMPIONSHIPS IS GREAT...",
+    "...BUT NOTHING BEATS HAVING A\nFAN AS AWESOME AS YOU!",
+    "I DEDICATE MY NEXT RACE WIN\nTO YOU. HAPPY BIRTHDAY!",
+    "NOW GO CELEBRATE AT\nFULL THROTTLE — NO LIMITS!",
+    "FROM YOUR FAVOURITE DRIVER,\nMAX VERSTAPPEN 🏆",
+  ];
+
+  const textEl     = document.getElementById('dialogueText');
+  const nextInd    = document.getElementById('nextIndicator');
+  const statsCard  = document.getElementById('statsCard');
+  const replayBtn  = document.getElementById('replayBtn');
+  const dialogueBox= document.getElementById('dialogueBox');
+
+  let lineIdx    = 0;
+  let charIdx    = 0;
+  let typing     = false;
+  let typeTimer  = null;
+  let done       = false;
+
+  const SPEED = 38; // ms per character
+
+  function clearText() {
+    textEl.innerHTML = '';
+  }
+
+  function typeLine(line, onDone) {
+    typing = true;
+    nextInd.classList.remove('visible');
+    charIdx = 0;
+
+    // Handle newlines by splitting
+    const segments = line.split('\n');
+    let segIdx = 0;
+    let segCharIdx = 0;
+
+    textEl.innerHTML = '<span class="cursor-blink"></span>';
+    const cursor = textEl.querySelector('.cursor-blink');
+
+    function typeNext() {
+      if (segIdx >= segments.length) {
+        typing = false;
+        onDone();
+        return;
+      }
+
+      const seg = segments[segIdx];
+
+      if (segCharIdx < seg.length) {
+        const char = document.createTextNode(seg[segCharIdx]);
+        textEl.insertBefore(char, cursor);
+        segCharIdx++;
+        typeTimer = setTimeout(typeNext, SPEED);
+      } else {
+        segIdx++;
+        segCharIdx = 0;
+        if (segIdx < segments.length) {
+          const br = document.createElement('br');
+          textEl.insertBefore(br, cursor);
+          typeTimer = setTimeout(typeNext, SPEED);
+        } else {
+          typing = false;
+          onDone();
+        }
+      }
+    }
+
+    typeNext();
+  }
+
+  function showLine(idx) {
+    clearText();
+    if (idx >= LINES.length) {
+      endDialogue();
+      return;
+    }
+    typeLine(LINES[idx], () => {
+      nextInd.classList.add('visible');
+      if (idx === LINES.length - 1) {
+        nextInd.textContent = '▼ TAP TO FINISH';
+      }
+    });
+  }
+
+  function advance() {
+    if (typing) {
+      // Skip to end of current line immediately
+      clearTimeout(typeTimer);
+      typing = false;
+      const line = LINES[lineIdx];
+      textEl.innerHTML = line.replace(/\n/g, '<br>') + '<span class="cursor-blink"></span>';
+      nextInd.classList.add('visible');
+      if (lineIdx === LINES.length - 1) nextInd.textContent = '▼ TAP TO FINISH';
+      return;
+    }
+    lineIdx++;
+    showLine(lineIdx);
+  }
+
+  function endDialogue() {
+    nextInd.classList.remove('visible');
+    done = true;
+    statsCard.classList.add('visible');
+    replayBtn.classList.add('visible');
+    // Remove cursor blink
+    const cur = textEl.querySelector('.cursor-blink');
+    if (cur) cur.remove();
+  }
+
+  function startDialogue() {
+    lineIdx = 0;
+    done    = false;
+    statsCard.classList.remove('visible');
+    replayBtn.classList.remove('visible');
+    nextInd.textContent = '▼ TAP TO CONTINUE';
+    showLine(0);
+  }
+
+  // Click / tap to advance
+  dialogueBox.addEventListener('click', () => {
+    if (!done) advance();
+  });
+
+  // Keyboard support
+  document.addEventListener('keydown', e => {
+    if (['Enter','Space','ArrowRight'].includes(e.code) && !done) {
+      e.preventDefault();
+      advance();
+    }
+  });
+
+  // Start on load
+  window.addEventListener('load', () => {
+    setTimeout(startDialogue, 900);
+  });
+</script>
+</body>
+</html>
