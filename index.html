@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Vinu Sri 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  /* ── PIXEL RESET ── */
+  * { margin: 0; padding: 0; box-sizing: border-box; image-rendering: pixelated; }
+
+  :root {
+    --pink-bg: #fce4f0;
+    --pink2: #f8c8df;
+    --deep-pink: #d4547a;
+    --hot-pink: #e8739a;
+    --gold: #c9a84c;
+    --gold-light: #f0d080;
+    --text-dark: #7a1040;
+    --pixel-shadow: #b03060;
+    --white: #fff8fc;
+  }
+
+  body {
+    background-color: #fce4f0;
+    /* Subtle pixel grid pattern */
+    background-image:
+      linear-gradient(rgba(232,115,154,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,115,154,0.07) 1px, transparent 1px);
+    background-size: 16px 16px;
+    min-height: 100vh;
+    font-family: 'Press Start 2P', monospace;
+    overflow-x: hidden;
+  }
+
+  /* ══════════════════════════════
+     PIXEL TEXT HELPERS
+  ══════════════════════════════ */
+  .px-text {
+    font-family: 'Press Start 2P', monospace;
+    text-rendering: optimizeSpeed;
+  }
+
+  /* Chunky pixel drop-shadow mixin via text-shadow */
+  .px-shadow-pink {
+    text-shadow:
+      3px 0 0 var(--pixel-shadow),
+      0 3px 0 var(--pixel-shadow),
+      3px 3px 0 var(--pixel-shadow),
+      -1px 0 0 var(--pixel-shadow),
+      0 -1px 0 var(--pixel-shadow);
+  }
+
+  .px-shadow-gold {
+    text-shadow:
+      3px 0 0 #a07820,
+      0 3px 0 #a07820,
+      3px 3px 0 #a07820;
+  }
+
+  /* ══════════════════════════════
+     CORNER IMAGES — on-page, no border
+  ══════════════════════════════ */
+  .corner-img {
+    position: absolute;
+    z-index: 10;
+    width: 130px;
+    pointer-events: all;
+  }
+
+  .corner-img img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .corner-tl {
+    top: 20px;
+    left: 20px;
+  }
+
+  .corner-tr {
+    top: 20px;
+    right: 20px;
+  }
+
+  .corner-img:hover { transform: scale(1.08); transition: transform 0.2s steps(3); }
+
+  .corner-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.38rem;
+    color: var(--deep-pink);
+    text-align: center;
+    margin-top: 5px;
+    letter-spacing: 0.05em;
+    text-shadow: 1px 1px 0 #b03060;
+  }
+
+  /* ══════════════════════════════
+     HERO
+  ══════════════════════════════ */
+  .hero {
+    position: relative;
+    min-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 160px 20px 40px;
+    text-align: center;
+    overflow: visible;
+  }
+
+  /* Faded cat behind text */
+  .cat-bg {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(480px, 80vw);
+    height: auto;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+    image-rendering: pixelated;
+    filter: saturate(0.7) brightness(1.1);
+  }
+
+  /* ── Pixel decorative border around hero ── */
+  .hero-border {
+    position: absolute;
+    inset: 12px;
+    border: 4px solid rgba(212,84,122,0.25);
+    pointer-events: none;
+    z-index: 1;
+  }
+  /* Corner pixel dots */
+  .hero-border::before,
+  .hero-border::after {
+    content: '';
+    position: absolute;
+    width: 12px; height: 12px;
+    background: var(--deep-pink);
+    opacity: 0.5;
+  }
+  .hero-border::before { top: -6px; left: -6px; }
+  .hero-border::after  { bottom: -6px; right: -6px; }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* "A very special day" */
+  .subtitle-top {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(0.45rem, 1.2vw, 0.65rem);
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    opacity: 0;
+    animation: pixelIn 0.6s steps(1) 0.4s forwards;
+    text-shadow: 2px 2px 0 #a07820;
+    margin-bottom: 22px;
+  }
+
+  /* Spinning lotus */
+  .central-lotus-img {
+    margin: 0 auto 24px;
+    width: 96px; height: 96px;
+    opacity: 0;
+    animation: pixelIn 0.6s steps(1) 0.7s forwards;
+    image-rendering: pixelated;
+  }
+  .central-lotus-img img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    animation: spinPixel 6s steps(24) infinite;
+    filter: drop-shadow(3px 3px 0 rgba(212,84,122,0.4));
+  }
+  @keyframes spinPixel {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* HAPPY BIRTHDAY */
+  .main-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(1.1rem, 3.5vw, 2.4rem);
+    color: var(--deep-pink);
+    text-shadow:
+      4px 0 0 #b03060,
+      0 4px 0 #b03060,
+      4px 4px 0 #b03060,
+      8px 8px 0 rgba(176,48,96,0.25);
+    opacity: 0;
+    animation: pixelIn 0.6s steps(1) 1.0s forwards, pixelFlicker 8s steps(1) 2s infinite;
+    line-height: 1.6;
+    letter-spacing: 0.04em;
+  }
+
+  @keyframes pixelFlicker {
+    0%,95%,97%,100% { opacity: 1; }
+    96%              { opacity: 0.6; }
+  }
+
+  /* Pixel heart divider */
+  .heart-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 14px 0 10px;
+    opacity: 0;
+    animation: pixelIn 0.6s steps(1) 1.3s forwards;
+  }
+
+  .px-heart {
+    display: inline-block;
+    width: 20px; height: 18px;
+    position: relative;
+    animation: heartPulse 1.4s steps(2) infinite;
+  }
+
+  /* CSS pixel heart via box-shadow */
+  .px-heart::before {
+    content: '♥';
+    font-size: 1.1rem;
+    color: var(--deep-pink);
+    text-shadow: 2px 2px 0 #b03060;
+  }
+
+  @keyframes heartPulse {
+    0%,100% { transform: scale(1); }
+    50%      { transform: scale(1.3); }
+  }
+
+  /* VINU SRI */
+  .name-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(1.5rem, 5vw, 3.6rem);
+    color: var(--gold-light);
+    text-shadow:
+      4px 0 0 var(--gold),
+      0 4px 0 var(--gold),
+      4px 4px 0 var(--gold),
+      8px 8px 0 rgba(201,168,76,0.3);
+    opacity: 0;
+    animation: pixelIn 0.6s steps(1) 1.6s forwards;
+    letter-spacing: 0.06em;
+    margin-bottom: 20px;
+  }
+
+  .subtitle-msg {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(0.38rem, 1vw, 0.55rem);
+    color: var(--text-dark);
+    letter-spacing: 0.12em;
+    opacity: 0;
+    animation: pixelIn 0.6s steps(1) 1.9s forwards;
+    line-height: 2;
+    text-shadow: 1px 1px 0 rgba(176,48,96,0.3);
+  }
+
+  @keyframes pixelIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Pixel level-up stars row */
+  .star-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 22px;
+    opacity: 0;
+    animation: pixelIn 0.6s steps(1) 2.1s forwards;
+  }
+
+  .px-star {
+    font-size: 1rem;
+    animation: starBlink 1.8s steps(1) infinite;
+    color: var(--gold);
+    text-shadow: 2px 2px 0 #a07820;
+  }
+  .px-star:nth-child(2) { animation-delay: 0.3s; }
+  .px-star:nth-child(3) { animation-delay: 0.6s; }
+  .px-star:nth-child(4) { animation-delay: 0.9s; }
+  .px-star:nth-child(5) { animation-delay: 1.2s; }
+
+  @keyframes starBlink {
+    0%,49% { opacity: 1; }
+    50%,100% { opacity: 0.2; }
+  }
+
+  /* ── GIFT IMAGE LINK ── */
+  .gift-link {
+    display: inline-block;
+    margin-top: 5px;
+    opacity: 0;
+    animation: pixelIn 0.6s steps(1) 1.9s forwards;
+    cursor: pointer;
+  }
+
+  .gift-link img {
+    width: 100px;
+    height: auto;
+    image-rendering: pixelated;
+    display: block;
+    transition: transform 0.15s steps(2);
+  }
+
+  .gift-link:hover img {
+    transform: scale(1.1);
+  }
+  .pixel-divider {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    overflow: hidden;
+    height: 10px;
+  }
+
+  .pixel-divider span {
+    display: inline-block;
+    width: 10px; height: 10px;
+    flex-shrink: 0;
+  }
+
+  /* ══════════════════════════════
+     GARDEN STRAP — static packed garden
+  ══════════════════════════════ */
+  .garden-strap {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    border-top: 4px solid #c06080;
+    border-bottom: 4px solid #c06080;
+  }
+
+  .garden-strap::before,
+  .garden-strap::after {
+    content: '';
+    display: block;
+    height: 8px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--deep-pink) 0px, var(--deep-pink) 8px,
+      var(--hot-pink) 8px, var(--hot-pink) 16px,
+      #f4a7c3 16px, #f4a7c3 24px,
+      var(--hot-pink) 24px, var(--hot-pink) 32px
+    );
+    position: relative; z-index: 2;
+  }
+
+  .garden-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.5rem;
+    color: var(--deep-pink);
+    text-align: center;
+    padding: 8px 0 4px;
+    letter-spacing: 0.2em;
+    text-shadow: 1px 1px 0 #b03060;
+    position: relative; z-index: 2;
+  }
+
+  /* The garden bed — flowers positioned by JS */
+  .garden-bed {
+    position: relative;
+    width: 100%;
+    height: 260px;
+  }
+
+  .flower-item {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .flower-item img {
+    display: block;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(2px 2px 0 rgba(176,48,96,0.2));
+  }
+
+  .flower-stem { display: none; }
+
+  .garden-soil {
+    height: 14px;
+    background: repeating-linear-gradient(
+      90deg,
+      #a06040 0px, #a06040 8px,
+      #8a5030 8px, #8a5030 16px
+    );
+    width: 100%;
+    position: relative; z-index: 2;
+  }
+
+  /* ══════════════════════════════
+     FOOTER
+  ══════════════════════════════ */
+  .footer {
+    text-align: center;
+    padding: 18px 10px 22px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.38rem;
+    color: rgba(122,32,64,0.45);
+    letter-spacing: 0.1em;
+  }
+
+  /* ══════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════ */
+  @media (max-width: 600px) {
+    .corner-img { width: 100px; }
+    .cat-bg { width: 80vw; }
+    .flower-item img { height: 64px; }
+    .main-title { font-size: 0.9rem; }
+    .name-title { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-border"></div>
+
+  <!-- Music Player (top-left) -->
+  <div class="corner-img corner-tl">
+    <a href="music.html">
+      <img src="musicplayer.png" alt="Music Player"
+        onerror="this.outerHTML='<div style=\'font-size:3rem;text-align:center;\'>💿</div>'">
+    </a>
+    <div class="corner-label">► MUSIC</div>
+  </div>
+
+  <!-- F1 Car (top-right) -->
+  <div class="corner-img corner-tr">
+    <a href="f1.html">
+      <img src="f1car.png" alt="F1 Car"
+        onerror="this.outerHTML='<div style=\'font-size:3rem;text-align:center;\'>🏎️</div>'">
+    </a>
+    <div class="corner-label">MAX #1</div>
+  </div>
+
+  <!-- Faded cat background -->
+  <img class="cat-bg" src="cat.png" alt=""
+    onerror="this.style.display='none'">
+
+  <div class="hero-content">
+    <p class="subtitle-top">* A VERY SPECIAL DAY *</p>
+
+    <!-- Spinning lotus -->
+    <div class="central-lotus-img">
+      <img src="lotus.png" alt="Lotus"
+        onerror="this.outerHTML='<div style=\'font-size:5rem;line-height:1;animation:spinPixel 6s steps(24) infinite;\'>🌸</div>'">
+    </div>
+
+    <h1 class="main-title">HAPPY<br>BIRTHDAY</h1>
+
+    <div class="heart-row">
+      <span class="px-heart">♥</span>
+      <span class="px-heart">♥</span>
+      <span class="px-heart">♥</span>
+    </div>
+
+    <h2 class="name-title">VINU SRI</h2>
+
+    <a href="cake.html" class="gift-link">
+      <img src="gift.png" alt="Open Gift"
+        onerror="this.outerHTML='<span style=\'font-size:64px;line-height:1;\'>🎁</span>'">
+    </a>
+
+    <p class="subtitle-msg">MAY YOUR DAY BLOOM<br>WITH INFINITE JOY</p>
+
+    <div class="star-row">
+      <span class="px-star">★</span>
+      <span class="px-star">★</span>
+      <span class="px-star">★</span>
+      <span class="px-star">★</span>
+      <span class="px-star">★</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── PIXEL GARDEN STRAP ── -->
+<div class="garden-strap">
+  <div class="garden-label">✿ VINU SRI'S FLOWER GARDEN ✿</div>
+  <div class="garden-bed" id="gardenBed"></div>
+  <div class="garden-soil"></div>
+</div>
+
+<div class="footer">PRESS START TO CELEBRATE ★ VINU SRI'S BIRTHDAY</div>
+
+<script>
+    // ── STATIC PACKED GARDEN ──
+  const flowers  = ['flower1.png','flower2.png','flower3.png','flower4.png'];
+  const fallbackEmoji = ['🌸','🌺','🌼','🌷'];
+  const bed = document.getElementById('gardenBed');
+
+  function buildGarden() {
+    const W = bed.offsetWidth || window.innerWidth;
+
+    // Larger flower sizes
+    const sizes = [110, 130, 150, 170, 130, 110, 150];
+    const stepX = 38;
+    const cols = Math.ceil(W / stepX) + 4;
+
+    bed.innerHTML = '';
+
+    for (let i = 0; i < cols; i++) {
+      const fi = i % flowers.length;
+      const sizeIdx = i % sizes.length;
+      const imgH = sizes[sizeIdx];
+
+      const x = i * stepX + (Math.random() * 12 - 6);
+      const yOffset = Math.floor(Math.random() * 36);
+
+      const item = document.createElement('div');
+      item.className = 'flower-item';
+      item.style.left = x + 'px';
+      item.style.bottom = yOffset + 'px';
+
+      const img = document.createElement('img');
+      img.src = flowers[fi];
+      img.alt = fallbackEmoji[fi];
+      img.style.height = imgH + 'px';
+      img.style.width = 'auto';
+
+      img.onerror = (function(idx, h) {
+        return function() {
+          const sp = document.createElement('span');
+          sp.textContent = fallbackEmoji[idx];
+          sp.style.cssText = `font-size:${h}px;line-height:1;display:block;`;
+          this.parentNode.replaceChild(sp, this);
+        };
+      })(fi, imgH);
+
+      item.appendChild(img);
+      bed.appendChild(item);
+    }
+  }
+
+  buildGarden();
+  window.addEventListener('resize', buildGarden);
+
+  // Pixel sparkle effect on click anywhere
+  document.body.addEventListener('click', function(e) {
+    const sparkles = ['★','✿','♥','★','✦'];
+    for (let i = 0; i < 5; i++) {
+      const s = document.createElement('span');
+      s.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+      const angle = (Math.random() * 360) * Math.PI / 180;
+      const dist = 30 + Math.random() * 50;
+      s.style.cssText = `
+        position:fixed;
+        left:${e.clientX}px; top:${e.clientY}px;
+        font-size:${10 + Math.random()*10}px;
+        color:${['#e8739a','#f0d080','#d4547a','#f4a7c3'][Math.floor(Math.random()*4)]};
+        pointer-events:none;
+        z-index:9999;
+        font-family:'Press Start 2P',monospace;
+        text-shadow:1px 1px 0 #b03060;
+        transition:all 0.6s steps(6);
+        transform:translate(-50%,-50%);
+      `;
+      document.body.appendChild(s);
+      requestAnimationFrame(() => {
+        s.style.left = (e.clientX + Math.cos(angle)*dist) + 'px';
+        s.style.top  = (e.clientY + Math.sin(angle)*dist) + 'px';
+        s.style.opacity = '0';
+      });
+      setTimeout(() => s.remove(), 700);
+    }
+  });
+</script>
+</body>
+</html>

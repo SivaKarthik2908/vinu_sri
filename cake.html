@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Make a Wish!</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; image-rendering: pixelated; }
+
+  :root {
+    --pink-bg: #fce4f0;
+    --deep-pink: #d4547a;
+    --hot-pink: #e8739a;
+    --gold: #c9a84c;
+    --gold-light: #f0d080;
+    --text-dark: #7a1040;
+    --pixel-shadow: #b03060;
+  }
+
+  body {
+    background-color: #fce4f0;
+    background-image:
+      linear-gradient(rgba(232,115,154,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,115,154,0.07) 1px, transparent 1px);
+    background-size: 16px 16px;
+    min-height: 100vh;
+    font-family: 'Press Start 2P', monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 30px 20px;
+  }
+
+  /* ── BACK BUTTON ── */
+  .back-btn {
+    position: fixed;
+    top: 18px; left: 18px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.5rem;
+    color: var(--deep-pink);
+    text-decoration: none;
+    padding: 8px 12px;
+    background: #fff0f8;
+    border-top: 3px solid #fff8fc;
+    border-left: 3px solid #fff8fc;
+    border-right: 3px solid #b03060;
+    border-bottom: 3px solid #b03060;
+    box-shadow: 3px 3px 0 #7a1040;
+    transition: transform 0.1s steps(1), box-shadow 0.1s steps(1);
+    z-index: 100;
+    letter-spacing: 0.1em;
+  }
+  .back-btn:hover { transform: translate(2px,2px); box-shadow: 1px 1px 0 #7a1040; }
+
+  /* ── TITLE ── */
+  .page-title {
+    font-size: clamp(0.6rem, 2vw, 1rem);
+    color: var(--deep-pink);
+    text-shadow: 3px 3px 0 #b03060;
+    margin-bottom: 30px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    line-height: 2;
+    opacity: 0;
+    animation: fadeIn 0.5s steps(1) 0.2s forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ── CAKE FRAME — no box, just the image ── */
+  .cake-frame {
+    position: relative;
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: popIn 0.4s steps(3) 0.5s forwards;
+  }
+
+  @keyframes popIn {
+    0%   { opacity: 0; transform: scale(0.5); }
+    60%  { transform: scale(1.08); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .cake-img {
+    display: block;
+    width: min(320px, 75vw);
+    height: auto;
+    image-rendering: pixelated;
+    transition: none;
+  }
+
+  /* Placeholder when no image */
+  .cake-placeholder {
+    width: min(320px, 75vw);
+    height: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: transparent;
+  }
+
+  .cake-placeholder-icon {
+    font-size: 80px;
+    line-height: 1;
+    animation: flicker 1.5s steps(1) infinite;
+  }
+
+  @keyframes flicker {
+    0%,90%,100% { opacity: 1; }
+    95% { opacity: 0.4; }
+  }
+
+  .cake-placeholder-text {
+    font-size: 0.4rem;
+    color: rgba(122,32,64,0.5);
+    text-align: center;
+    line-height: 2;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── STATUS TEXT ── */
+  .status-text {
+    font-size: clamp(0.45rem, 1.5vw, 0.65rem);
+    color: var(--text-dark);
+    text-shadow: 1px 1px 0 rgba(176,48,96,0.3);
+    margin-bottom: 24px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    line-height: 2;
+    min-height: 2em;
+  }
+
+  /* ── BLOW BUTTON ── */
+  .blow-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(0.55rem, 1.5vw, 0.8rem);
+    color: #fff0f8;
+    background: var(--deep-pink);
+    border: none;
+    padding: 14px 24px;
+    cursor: pointer;
+    border-top: 4px solid #f4a7c3;
+    border-left: 4px solid #f4a7c3;
+    border-right: 4px solid #7a1040;
+    border-bottom: 4px solid #7a1040;
+    box-shadow: 5px 5px 0 #4a0820;
+    letter-spacing: 0.1em;
+    transition: transform 0.1s steps(1), box-shadow 0.1s steps(1);
+    text-shadow: 2px 2px 0 #7a1040;
+    opacity: 0;
+    animation: fadeIn 0.5s steps(1) 0.8s forwards;
+    position: relative;
+    z-index: 10;
+  }
+
+  .blow-btn:hover {
+    background: #e8739a;
+    transform: translate(2px, 2px);
+    box-shadow: 3px 3px 0 #4a0820;
+  }
+
+  .blow-btn:active {
+    transform: translate(5px, 5px);
+    box-shadow: none;
+  }
+
+  .blow-btn:disabled {
+    background: #c0a0b0;
+    border-color: #a08090;
+    box-shadow: none;
+    cursor: default;
+    transform: none;
+  }
+
+  /* ── WISH TEXT (appears after blow) ── */
+  .wish-text {
+    margin-top: 20px;
+    font-size: clamp(0.4rem, 1.2vw, 0.6rem);
+    color: var(--gold);
+    text-shadow: 2px 2px 0 #a07820;
+    letter-spacing: 0.12em;
+    text-align: center;
+    line-height: 2.2;
+    opacity: 0;
+    transition: opacity 0.3s steps(3);
+  }
+
+  .wish-text.visible { opacity: 1; }
+
+  /* ══════════════════════════════
+     PIXEL CONFETTI
+  ══════════════════════════════ */
+  .confetti-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+  }
+</style>
+</head>
+<body>
+
+<canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+
+<a href="index.html" class="back-btn">← BACK</a>
+
+<h1 class="page-title">MAKE A WISH,<br>VINU SRI! 🎂</h1>
+
+<div class="cake-frame" id="cakeFrame">
+  <!-- Shows cake GIF with candles by default -->
+  <img class="cake-img" id="cakeImg"
+    src="cake_candles.gif"
+    alt="Birthday Cake with Candles"
+    onerror="this.style.display='none'; document.getElementById('cakeFallback').style.display='flex';">
+  <div class="cake-placeholder" id="cakeFallback" style="display:none;">
+    <!-- <div class="cake-placeholder-icon" id="cakeEmoji"></div> -->
+    <div class="cake-placeholder-text">ADD cake_candles.png<br>& cake_no_candles.png</div>
+  </div>
+</div>
+
+<div class="status-text" id="statusText">PRESS BLOW TO MAKE A WISH!</div>
+
+<button class="blow-btn" id="blowBtn" onclick="blowCandles()">
+  BLOW!
+</button>
+
+<div class="wish-text" id="wishText">
+  ★ HAPPY BIRTHDAY VINU SRI! ★<br>
+  MAY ALL YOUR WISHES COME TRUE!
+</div>
+
+<script>
+  // ═══════════════════════════
+  // PIXEL CONFETTI ENGINE
+  // ═══════════════════════════
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  window.addEventListener('resize', () => {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+
+  // Pixel confetti colours — bright party palette
+  const COLOURS = [
+    '#e8739a','#f0d080','#d4547a','#f4a7c3',
+    '#c9a84c','#ff6eb4','#ffd6e7','#ff4444',
+    '#44ddff','#aaff44','#ffaa00','#cc44ff'
+  ];
+
+  // Pixel confetti shapes drawn as tiny 4×4 or 6×6 blocks
+  const SHAPES = ['square','rect','diamond','star'];
+
+  let pieces = [];
+  let animRunning = false;
+
+  function spawnConfetti() {
+    pieces = [];
+    const count = 160;
+    for (let i = 0; i < count; i++) {
+      pieces.push({
+        x: Math.random() * canvas.width,
+        y: -10 - Math.random() * canvas.height * 0.5, // start above screen
+        vx: (Math.random() - 0.5) * 3,
+        vy: 2 + Math.random() * 4,
+        size: Math.floor(Math.random() * 3) * 4 + 4, // 4, 8, or 12px
+        colour: COLOURS[Math.floor(Math.random() * COLOURS.length)],
+        shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
+        rotation: Math.floor(Math.random() * 4) * 90, // pixel-stepped rotation
+        rotSpeed: (Math.random() > 0.5 ? 1 : -1) * 90, // flip 90° at a time
+        rotTimer: 0,
+        rotInterval: 8 + Math.floor(Math.random() * 16), // frames between rotation
+        gravity: 0.08 + Math.random() * 0.06,
+        wobble: Math.random() * Math.PI * 2,
+        wobbleSpeed: 0.05 + Math.random() * 0.05,
+        alpha: 1,
+        life: 180 + Math.floor(Math.random() * 120), // frames alive
+        age: 0,
+      });
+    }
+  }
+
+  function drawPixelShape(p) {
+    ctx.save();
+    ctx.globalAlpha = p.alpha;
+    ctx.fillStyle = p.colour;
+
+    const s = p.size;
+    const x = Math.round(p.x);
+    const y = Math.round(p.y);
+
+    if (p.shape === 'square') {
+      ctx.fillRect(x, y, s, s);
+      // pixel highlight
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.fillRect(x, y, Math.max(2, s/4), Math.max(2, s/4));
+
+    } else if (p.shape === 'rect') {
+      ctx.fillRect(x, y, s, Math.max(4, s/2));
+      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+      ctx.fillRect(x, y, s, 2);
+
+    } else if (p.shape === 'diamond') {
+      // pixel diamond: draw as rotated square using fillRect grid
+      const h = Math.max(4, Math.floor(s/2));
+      ctx.fillRect(x + h,     y,         h, h); // top
+      ctx.fillRect(x,         y + h,     h, h); // left
+      ctx.fillRect(x + h * 2, y + h,     h, h); // right
+      ctx.fillRect(x + h,     y + h * 2, h, h); // bottom
+
+    } else if (p.shape === 'star') {
+      // mini pixel star: 3×3 cross pattern
+      const u = Math.max(4, Math.floor(s/3));
+      ctx.fillRect(x + u, y,         u, u * 3); // vertical bar
+      ctx.fillRect(x,     y + u,     u * 3, u); // horizontal bar
+    }
+
+    ctx.restore();
+  }
+
+  function tickConfetti() {
+    if (!animRunning) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let alive = 0;
+    for (const p of pieces) {
+      p.age++;
+      if (p.age > p.life) continue;
+      alive++;
+
+      // Physics
+      p.wobble += p.wobbleSpeed;
+      p.vx += Math.sin(p.wobble) * 0.1;
+      p.vy += p.gravity;
+      p.x  += p.vx;
+      p.y  += p.vy;
+
+      // Stepped pixel rotation
+      p.rotTimer++;
+      if (p.rotTimer >= p.rotInterval) {
+        p.rotation = (p.rotation + p.rotSpeed + 360) % 360;
+        p.rotTimer = 0;
+      }
+
+      // Fade out last 40 frames
+      if (p.age > p.life - 40) {
+        p.alpha = (p.life - p.age) / 40;
+      }
+
+      drawPixelShape(p);
+    }
+
+    if (alive > 0) {
+      requestAnimationFrame(tickConfetti);
+    } else {
+      animRunning = false;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  function launchConfetti() {
+    spawnConfetti();
+    if (!animRunning) {
+      animRunning = true;
+      tickConfetti();
+    }
+  }
+
+  // ═══════════════════════════
+  // BLOW CANDLES
+  // ═══════════════════════════
+  let blown = false;
+
+  function blowCandles() {
+    if (blown) return;
+    blown = true;
+
+    const btn    = document.getElementById('blowBtn');
+    const status = document.getElementById('statusText');
+    const wish   = document.getElementById('wishText');
+    const img    = document.getElementById('cakeImg');
+    const emoji  = document.getElementById('cakeEmoji');
+
+    btn.disabled = true;
+    btn.textContent = '✓ BLOWN!';
+
+    // Swap GIF → PNG (no candles)
+    if (img.style.display !== 'none') {
+      img.style.opacity = '0';
+      setTimeout(() => {
+        img.src = 'cake1.png';
+        img.onerror = function() {
+          this.style.display = 'none';
+          document.getElementById('cakeFallback').style.display = 'flex';
+          if (emoji) emoji.textContent = '🎂';
+        };
+        let op = 0;
+        const fadeIn = setInterval(() => {
+          op += 0.25;
+          img.style.opacity = Math.min(op, 1);
+          if (op >= 1) clearInterval(fadeIn);
+        }, 60);
+      }, 200);
+    } else if (emoji) {
+      emoji.textContent = '🎂';
+    }
+
+    status.textContent = '✨ WISH MADE! ✨';
+
+    // Launch confetti
+    launchConfetti();
+    // Second burst 400ms later
+    setTimeout(launchConfetti, 400);
+    // Third burst
+    setTimeout(launchConfetti, 900);
+
+    // Show wish text
+    setTimeout(() => { wish.classList.add('visible'); }, 800);
+  }
+</script>
+</body>
+</html>
