@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday Vinu Sri 🌸</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
 <style>
   /* ── PIXEL RESET ── */
   * { margin: 0; padding: 0; box-sizing: border-box; image-rendering: pixelated; }
@@ -29,7 +29,7 @@
       linear-gradient(90deg, rgba(232,115,154,0.07) 1px, transparent 1px);
     background-size: 16px 16px;
     min-height: 100vh;
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Silkscreen', monospace;
     overflow-x: hidden;
   }
 
@@ -37,11 +37,16 @@
      PIXEL TEXT HELPERS
   ══════════════════════════════ */
   .px-text {
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Silkscreen', monospace;
     text-rendering: optimizeSpeed;
   }
 
   /* Chunky pixel drop-shadow mixin via text-shadow */
+  /* .px-shadow-pink {
+  }
+
+  .px-shadow-gold {
+  } */
 
   /* ══════════════════════════════
      CORNER IMAGES — on-page, no border
@@ -72,7 +77,7 @@
   .corner-img:hover { transform: scale(1.08); transition: transform 0.2s steps(3); }
 
   .corner-label {
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Silkscreen', monospace;
     font-size: 0.38rem;
     color: var(--deep-pink);
     text-align: center;
@@ -136,7 +141,7 @@
 
   /* "A very special day" */
   .subtitle-top {
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Silkscreen', monospace;
     font-size: clamp(0.45rem, 1.2vw, 0.65rem);
     color: var(--gold);
     letter-spacing: 0.15em;
@@ -166,7 +171,7 @@
 
   /* HAPPY BIRTHDAY */
   .main-title {
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Silkscreen', monospace;
     font-size: clamp(1.1rem, 3.5vw, 2.4rem);
     color: var(--deep-pink);
     opacity: 0;
@@ -211,17 +216,17 @@
 
   /* VINU SRI */
   .name-title {
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Silkscreen', monospace;
     font-size: clamp(1.5rem, 5vw, 3.6rem);
     color: var(--gold-light);
     opacity: 0;
     animation: pixelIn 0.6s steps(1) 1.6s forwards;
     letter-spacing: 0.06em;
-    margin-bottom: 20px;
+    margin-bottom: 0;
   }
 
   .subtitle-msg {
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Silkscreen', monospace;
     font-size: clamp(0.38rem, 1vw, 0.55rem);
     color: var(--text-dark);
     letter-spacing: 0.12em;
@@ -263,7 +268,7 @@
   /* ── GIFT IMAGE LINK ── */
   .gift-link {
     display: inline-block;
-    margin-top: 20px;
+    margin-top: 8px;
     opacity: 0;
     animation: pixelIn 0.6s steps(1) 1.9s forwards;
     cursor: pointer;
@@ -321,7 +326,7 @@
   }
 
   .garden-label {
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Silkscreen', monospace;
     font-size: 0.5rem;
     color: var(--deep-pink);
     text-align: center;
@@ -371,7 +376,7 @@
   .footer {
     text-align: center;
     padding: 18px 10px 22px;
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Silkscreen', monospace;
     font-size: 0.38rem;
     color: rgba(122,32,64,0.45);
     letter-spacing: 0.1em;
@@ -463,18 +468,16 @@
 <div class="footer">PRESS START TO CELEBRATE ★ VINU SRI'S BIRTHDAY</div>
 
 <script>
-    // ── STATIC PACKED GARDEN ──
-  const flowers  = ['flower1.png','flower2.png','flower3.png','flower4.png'];
-  const fallbackEmoji = ['🌸','🌺','🌼','🌷'];
+  // ── STATIC PACKED GARDEN ──
+  const flowers  = ['flower1.png','flower2.png','flower3.png'];
+  const fallbackEmoji = ['🌸','🌺','🌼'];
   const bed = document.getElementById('gardenBed');
 
   function buildGarden() {
     const W = bed.offsetWidth || window.innerWidth;
-
-    // Larger flower sizes
-    const sizes = [110, 130, 150, 170, 130, 110, 150];
-    const stepX = 38;
-    const cols = Math.ceil(W / stepX) + 4;
+    const sizes = [110, 130, 150, 130, 110, 150, 130];
+    const stepX = 30;
+    const cols = Math.ceil(W / stepX) + 6;
 
     bed.innerHTML = '';
 
@@ -483,7 +486,7 @@
       const sizeIdx = i % sizes.length;
       const imgH = sizes[sizeIdx];
 
-      const x = i * stepX + (Math.random() * 12 - 6);
+      const x = i * stepX + (Math.random() * 10 - 5);
       const yOffset = Math.floor(Math.random() * 36);
 
       const item = document.createElement('div');
@@ -529,7 +532,7 @@
         color:${['#e8739a','#f0d080','#d4547a','#f4a7c3'][Math.floor(Math.random()*4)]};
         pointer-events:none;
         z-index:9999;
-        font-family:'Press Start 2P',monospace;
+        font-family:'Silkscreen',monospace;
         transition:all 0.6s steps(6);
         transform:translate(-50%,-50%);
       `;
