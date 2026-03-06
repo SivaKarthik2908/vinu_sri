@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -191,6 +191,113 @@
 
   .wish-text.visible { opacity: 1; }
 
+  /* ── CRYING AVATAR ── */
+  .cry-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 24px;
+    opacity: 0;
+    transition: opacity 0.4s steps(3);
+    text-decoration: none;
+  }
+
+  .cry-wrap.visible { opacity: 1; }
+
+  .cry-avatar {
+    position: relative;
+    width: 80px; height: 80px;
+    cursor: pointer;
+    animation: cryBounce 1.2s steps(3) infinite;
+  }
+
+  @keyframes cryBounce {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+
+  /* Pixel face */
+  .cry-face {
+    width: 80px; height: 80px;
+    background: #ffda9e;
+    border-top: 4px solid #e8a060;
+    border-left: 4px solid #e8a060;
+    border-right: 4px solid #b06820;
+    border-bottom: 4px solid #b06820;
+    box-shadow: 3px 3px 0 #804010;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Eyes — closed/sad */
+  .cry-eyes {
+    position: absolute;
+    top: 22px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .cry-eye {
+    width: 8px; height: 4px;
+    background: #5a2800;
+    border-radius: 0;
+    /* pixel sad arc — using box-shadow trick */
+    position: relative;
+  }
+
+  /* Tears */
+  .tear {
+    position: absolute;
+    width: 4px;
+    background: #88ccff;
+    border-bottom: 2px solid #5599ee;
+    animation: tearDrop 0.8s steps(4) infinite;
+    top: 4px;
+  }
+
+  .tear-l { left: 0; animation-delay: 0s; }
+  .tear-r { right: 0; animation-delay: 0.4s; }
+
+  @keyframes tearDrop {
+    0%   { height: 4px; opacity: 1; top: 4px; }
+    50%  { height: 10px; opacity: 1; top: 4px; }
+    100% { height: 4px; opacity: 0; top: 14px; }
+  }
+
+  /* Mouth — sad */
+  .cry-mouth {
+    position: absolute;
+    bottom: 18px;
+    width: 24px; height: 10px;
+    border-bottom: 4px solid #5a2800;
+    border-left: 4px solid #5a2800;
+    border-right: 4px solid #5a2800;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    /* flip to sad = arch downward */
+    transform: scaleY(-1);
+  }
+
+  .cry-label {
+    font-family: 'Silkscreen', monospace;
+    font-size: 0.42rem;
+    color: var(--deep-pink);
+    letter-spacing: 0.1em;
+    text-align: center;
+    line-height: 1.8;
+    animation: labelBlink 1.5s steps(1) infinite;
+  }
+
+  @keyframes labelBlink {
+    0%,70%,100% { opacity: 1; }
+    71%,99%     { opacity: 0.3; }
+  }
+
   /* ══════════════════════════════
      PIXEL CONFETTI
   ══════════════════════════════ */
@@ -220,7 +327,7 @@
     alt="Birthday Cake with Candles"
     onerror="this.style.display='none'; document.getElementById('cakeFallback').style.display='flex';">
   <div class="cake-placeholder" id="cakeFallback" style="display:none;">
-    <div class="cake-placeholder-icon" id="cakeEmoji">🎂</div>
+    <!-- <div class="cake-placeholder-icon" id="cakeEmoji"></div> -->
     <div class="cake-placeholder-text">ADD cake_candles.png<br>& cake_no_candles.png</div>
   </div>
 </div>
@@ -228,13 +335,31 @@
 <div class="status-text" id="statusText">PRESS BLOW TO MAKE A WISH!</div>
 
 <button class="blow-btn" id="blowBtn" onclick="blowCandles()">
-  BLOW!
+   BLOW!
 </button>
 
 <div class="wish-text" id="wishText">
   ★ HAPPY BIRTHDAY VINU SRI! ★<br>
   MAY ALL YOUR WISHES COME TRUE!
 </div>
+
+<!-- Crying avatar — appears after blow, links to apology page -->
+<a href="sorry.html" class="cry-wrap" id="cryWrap">
+  <div class="cry-avatar">
+    <div class="cry-face">
+      <div class="cry-eyes">
+        <div class="cry-eye">
+          <div class="tear tear-l"></div>
+        </div>
+        <div class="cry-eye">
+          <div class="tear tear-r"></div>
+        </div>
+      </div>
+      <div class="cry-mouth"></div>
+    </div>
+  </div>
+  <div class="cry-label">I'M SO SORRY...</div>
+</a>
 
 <script>
   // ═══════════════════════════
@@ -432,6 +557,11 @@
 
     // Show wish text
     setTimeout(() => { wish.classList.add('visible'); }, 800);
+
+    // Show crying avatar a moment later
+    setTimeout(() => {
+      document.getElementById('cryWrap').classList.add('visible');
+    }, 2000);
   }
 </script>
 </body>
