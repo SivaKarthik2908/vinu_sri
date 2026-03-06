@@ -42,21 +42,6 @@
   }
 
   /* Chunky pixel drop-shadow mixin via text-shadow */
-  .px-shadow-pink {
-    text-shadow:
-      3px 0 0 var(--pixel-shadow),
-      0 3px 0 var(--pixel-shadow),
-      3px 3px 0 var(--pixel-shadow),
-      -1px 0 0 var(--pixel-shadow),
-      0 -1px 0 var(--pixel-shadow);
-  }
-
-  .px-shadow-gold {
-    text-shadow:
-      3px 0 0 #a07820,
-      0 3px 0 #a07820,
-      3px 3px 0 #a07820;
-  }
 
   /* ══════════════════════════════
      CORNER IMAGES — on-page, no border
@@ -93,7 +78,6 @@
     text-align: center;
     margin-top: 5px;
     letter-spacing: 0.05em;
-    text-shadow: 1px 1px 0 #b03060;
   }
 
   /* ══════════════════════════════
@@ -158,7 +142,6 @@
     letter-spacing: 0.15em;
     opacity: 0;
     animation: pixelIn 0.6s steps(1) 0.4s forwards;
-    text-shadow: 2px 2px 0 #a07820;
     margin-bottom: 22px;
   }
 
@@ -186,11 +169,6 @@
     font-family: 'Press Start 2P', monospace;
     font-size: clamp(1.1rem, 3.5vw, 2.4rem);
     color: var(--deep-pink);
-    text-shadow:
-      4px 0 0 #b03060,
-      0 4px 0 #b03060,
-      4px 4px 0 #b03060,
-      8px 8px 0 rgba(176,48,96,0.25);
     opacity: 0;
     animation: pixelIn 0.6s steps(1) 1.0s forwards, pixelFlicker 8s steps(1) 2s infinite;
     line-height: 1.6;
@@ -224,7 +202,6 @@
     content: '♥';
     font-size: 1.1rem;
     color: var(--deep-pink);
-    text-shadow: 2px 2px 0 #b03060;
   }
 
   @keyframes heartPulse {
@@ -237,11 +214,6 @@
     font-family: 'Press Start 2P', monospace;
     font-size: clamp(1.5rem, 5vw, 3.6rem);
     color: var(--gold-light);
-    text-shadow:
-      4px 0 0 var(--gold),
-      0 4px 0 var(--gold),
-      4px 4px 0 var(--gold),
-      8px 8px 0 rgba(201,168,76,0.3);
     opacity: 0;
     animation: pixelIn 0.6s steps(1) 1.6s forwards;
     letter-spacing: 0.06em;
@@ -256,7 +228,6 @@
     opacity: 0;
     animation: pixelIn 0.6s steps(1) 1.9s forwards;
     line-height: 2;
-    text-shadow: 1px 1px 0 rgba(176,48,96,0.3);
   }
 
   @keyframes pixelIn {
@@ -278,7 +249,6 @@
     font-size: 1rem;
     animation: starBlink 1.8s steps(1) infinite;
     color: var(--gold);
-    text-shadow: 2px 2px 0 #a07820;
   }
   .px-star:nth-child(2) { animation-delay: 0.3s; }
   .px-star:nth-child(3) { animation-delay: 0.6s; }
@@ -293,7 +263,7 @@
   /* ── GIFT IMAGE LINK ── */
   .gift-link {
     display: inline-block;
-    margin-top: 5px;
+    margin-top: 20px;
     opacity: 0;
     animation: pixelIn 0.6s steps(1) 1.9s forwards;
     cursor: pointer;
@@ -357,7 +327,6 @@
     text-align: center;
     padding: 8px 0 4px;
     letter-spacing: 0.2em;
-    text-shadow: 1px 1px 0 #b03060;
     position: relative; z-index: 2;
   }
 
@@ -561,7 +530,6 @@
         pointer-events:none;
         z-index:9999;
         font-family:'Press Start 2P',monospace;
-        text-shadow:1px 1px 0 #b03060;
         transition:all 0.6s steps(6);
         transform:translate(-50%,-50%);
       `;
