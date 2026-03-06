@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinu Sri's Music 🎵</title>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; image-rendering: pixelated; }
+
+  :root {
+    --pink-bg: #fce4f0;
+    --deep-pink: #d4547a;
+    --hot-pink: #e8739a;
+    --gold: #c9a84c;
+    --gold-light: #f0d080;
+    --text-dark: #7a1040;
+    --white: #fff8fc;
+    --btn-highlight: #ffd6e7;
+    --btn-shadow: #a03058;
+  }
+
+  body {
+    background-color: #fce4f0;
+    background-image:
+      linear-gradient(rgba(232,115,154,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,115,154,0.07) 1px, transparent 1px);
+    background-size: 16px 16px;
+    min-height: 100vh;
+    font-family: 'Silkscreen', monospace;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 16px 50px;
+  }
+
+  /* ── BACK BUTTON ── */
+  .back-btn {
+    align-self: flex-start;
+    font-family: 'Silkscreen', monospace;
+    font-size: 0.55rem;
+    color: var(--deep-pink);
+    text-decoration: none;
+    padding: 8px 14px;
+    background: var(--white);
+    border-top: 3px solid #ffd6e7;
+    border-left: 3px solid #ffd6e7;
+    border-right: 3px solid var(--btn-shadow);
+    border-bottom: 3px solid var(--btn-shadow);
+    box-shadow: 3px 3px 0 #7a1040;
+    margin-bottom: 24px;
+    letter-spacing: 0.08em;
+    transition: transform 0.1s steps(1), box-shadow 0.1s steps(1);
+  }
+  .back-btn:hover { transform: translate(2px,2px); box-shadow: 1px 1px 0 #7a1040; }
+
+  /* ── PAGE TITLE ── */
+  .page-title {
+    font-size: clamp(0.8rem, 3vw, 1.2rem);
+    color: var(--deep-pink);
+    letter-spacing: 0.12em;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  /* ══════════════════
+     PLAYER UNIT
+  ══════════════════ */
+  .player-unit {
+    width: 100%;
+    max-width: 420px;
+    background: var(--white);
+    border-top: 4px solid #ffd6e7;
+    border-left: 4px solid #ffd6e7;
+    border-right: 4px solid var(--btn-shadow);
+    border-bottom: 4px solid var(--btn-shadow);
+    box-shadow: 6px 6px 0 #7a1040;
+    padding: 20px 18px 22px;
+    margin-bottom: 24px;
+  }
+
+  /* ── PIXEL CD / DISC ── */
+  .disc-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+
+  .disc {
+    width: 110px; height: 110px;
+    position: relative;
+  }
+
+  /* Outer ring */
+  .disc-ring {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 50%, #fff8fc 18%, transparent 18.5%),
+      conic-gradient(
+        #e8c0d0 0deg, #f4a7c3 30deg, #d4547a 60deg,
+        #e8739a 90deg, #f0d080 120deg, #c9a84c 150deg,
+        #ffd6e7 180deg, #e8739a 210deg, #d4547a 240deg,
+        #f4a7c3 270deg, #e8c0d0 300deg, #f0d080 330deg, #e8c0d0 360deg
+      );
+    box-shadow: 3px 3px 0 #b03060, inset 0 0 0 3px rgba(255,255,255,0.3);
+    animation: discSpin 4s steps(36) infinite;
+    animation-play-state: paused;
+  }
+
+  .disc-ring.playing { animation-play-state: running; }
+
+  @keyframes discSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* Centre hole */
+  .disc-hole {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: #fce4f0;
+    border: 3px solid #d4547a;
+    z-index: 2;
+  }
+
+  /* ── NOW PLAYING ── */
+  .now-playing {
+    text-align: center;
+    margin-bottom: 14px;
+  }
+
+  .track-name {
+    font-size: clamp(0.5rem, 2vw, 0.7rem);
+    color: var(--text-dark);
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .track-index {
+    font-size: 0.4rem;
+    color: var(--hot-pink);
+    letter-spacing: 0.15em;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    position: relative;
+    height: 12px;
+    background: #f4c8d8;
+    border-top: 2px solid #b03060;
+    border-left: 2px solid #b03060;
+    border-right: 2px solid #ffd6e7;
+    border-bottom: 2px solid #ffd6e7;
+    margin-bottom: 6px;
+    cursor: pointer;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--deep-pink) 0px, var(--deep-pink) 6px,
+      var(--hot-pink) 6px, var(--hot-pink) 12px
+    );
+    transition: width 0.3s linear;
+  }
+
+  .time-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.38rem;
+    color: var(--deep-pink);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+
+  /* ── PIXEL EQ BARS ── */
+  .eq-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 3px;
+    height: 28px;
+    margin-bottom: 16px;
+  }
+
+  .eq-bar {
+    width: 7px;
+    background: var(--deep-pink);
+    border-top: 2px solid var(--hot-pink);
+    animation: eqBounce steps(4) infinite;
+    transform-origin: bottom;
+  }
+
+  .eq-wrap.paused .eq-bar { animation-play-state: paused; transform: scaleY(0.15); }
+
+  @keyframes eqBounce {
+    0%   { transform: scaleY(0.15); }
+    25%  { transform: scaleY(1); }
+    50%  { transform: scaleY(0.4); }
+    75%  { transform: scaleY(0.8); }
+    100% { transform: scaleY(0.15); }
+  }
+
+  /* ── CONTROLS ── */
+  .controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  /* Pixel button base */
+  .px-btn {
+    font-family: 'Silkscreen', monospace;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    background: var(--white);
+    border: none;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    border-top: 3px solid #ffd6e7;
+    border-left: 3px solid #ffd6e7;
+    border-right: 3px solid var(--btn-shadow);
+    border-bottom: 3px solid var(--btn-shadow);
+    box-shadow: 3px 3px 0 #7a1040;
+    transition: transform 0.1s steps(1), box-shadow 0.1s steps(1);
+    flex-shrink: 0;
+  }
+
+  .px-btn:hover { transform: translate(1px,1px); box-shadow: 2px 2px 0 #7a1040; }
+  .px-btn:active { transform: translate(3px,3px); box-shadow: none; }
+
+  /* Bigger play/pause */
+  .px-btn.play-pause {
+    width: 58px; height: 58px;
+    font-size: 1.3rem;
+    background: var(--deep-pink);
+    color: var(--white);
+    border-top-color: #f4a7c3;
+    border-left-color: #f4a7c3;
+    box-shadow: 4px 4px 0 #7a1040;
+  }
+
+  .px-btn.play-pause:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 #7a1040; }
+
+  /* ── VOLUME ── */
+  .volume-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .vol-label {
+    font-size: 0.45rem;
+    color: var(--deep-pink);
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+
+  .vol-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background: #f4c8d8;
+    border-top: 2px solid #b03060;
+    border-left: 2px solid #b03060;
+    border-right: 2px solid #ffd6e7;
+    border-bottom: 2px solid #ffd6e7;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .vol-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    background: var(--deep-pink);
+    border-top: 2px solid #f4a7c3;
+    border-left: 2px solid #f4a7c3;
+    border-right: 2px solid #7a1040;
+    border-bottom: 2px solid #7a1040;
+    cursor: pointer;
+  }
+
+  /* ══════════════════
+     PLAYLIST
+  ══════════════════ */
+  .playlist-unit {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .playlist-title {
+    font-size: 0.55rem;
+    color: var(--deep-pink);
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .playlist-box {
+    background: var(--white);
+    border-top: 4px solid #ffd6e7;
+    border-left: 4px solid #ffd6e7;
+    border-right: 4px solid var(--btn-shadow);
+    border-bottom: 4px solid var(--btn-shadow);
+    box-shadow: 4px 4px 0 #7a1040;
+    overflow: hidden;
+  }
+
+  .playlist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-bottom: 2px solid #f4c8d8;
+    cursor: pointer;
+    transition: background 0.1s steps(1);
+  }
+
+  .playlist-item:last-child { border-bottom: none; }
+
+  .playlist-item:hover { background: #fce4f0; }
+
+  .playlist-item.active {
+    background: var(--deep-pink);
+  }
+
+  .track-num {
+    font-size: 0.4rem;
+    color: var(--hot-pink);
+    width: 16px;
+    flex-shrink: 0;
+    letter-spacing: 0.05em;
+  }
+
+  .playlist-item.active .track-num { color: #ffd6e7; }
+
+  .track-info { flex: 1; min-width: 0; }
+
+  .track-title {
+    font-size: 0.48rem;
+    color: var(--text-dark);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .playlist-item.active .track-title { color: var(--white); }
+
+  .track-dur {
+    font-size: 0.38rem;
+    color: var(--hot-pink);
+    flex-shrink: 0;
+    letter-spacing: 0.05em;
+  }
+
+  .playlist-item.active .track-dur { color: #ffd6e7; }
+
+  /* Playing indicator — 3 tiny bouncing bars */
+  .playing-ind {
+    display: none;
+    gap: 2px;
+    align-items: flex-end;
+    height: 12px;
+    flex-shrink: 0;
+  }
+
+  .playlist-item.active .playing-ind { display: flex; }
+
+  .ind-bar {
+    width: 3px;
+    background: #ffd6e7;
+    animation: indBounce steps(3) infinite;
+    transform-origin: bottom;
+  }
+  .ind-bar:nth-child(2) { animation-delay: 0.15s; height: 8px; }
+  .ind-bar:nth-child(3) { animation-delay: 0.3s;  height: 5px; }
+
+  @keyframes indBounce {
+    0%,100% { transform: scaleY(0.3); }
+    50%      { transform: scaleY(1); }
+  }
+
+  /* ── PIXEL DECORATIVE BORDER ── */
+  .px-border {
+    position: fixed;
+    inset: 10px;
+    border: 3px solid rgba(212,84,122,0.18);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .px-border::before {
+    content: '';
+    position: absolute;
+    top: -5px; left: -5px;
+    width: 10px; height: 10px;
+    background: var(--deep-pink);
+    opacity: 0.4;
+  }
+  .px-border::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; right: -5px;
+    width: 10px; height: 10px;
+    background: var(--deep-pink);
+    opacity: 0.4;
+  }
+
+  /* ── FADE IN ── */
+  @keyframes pixelIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .player-unit, .playlist-unit {
+    opacity: 0;
+    animation: pixelIn 0.5s steps(1) 0.2s forwards;
+  }
+
+  .playlist-unit { animation-delay: 0.35s; }
+</style>
+</head>
+<body>
+
+<div class="px-border"></div>
+
+<a href="index.html" class="back-btn">← BACK</a>
+
+<div class="page-title">♪ VINU SRI'S MUSIC ♪</div>
+
+<!-- ══ PLAYER ══ -->
+<div class="player-unit">
+
+  <!-- Disc -->
+  <div class="disc-wrap">
+    <div class="disc">
+      <div class="disc-ring" id="discRing"></div>
+      <div class="disc-hole"></div>
+    </div>
+  </div>
+
+  <!-- Now playing -->
+  <div class="now-playing">
+    <div class="track-name" id="trackName">SELECT A SONG</div>
+    <div class="track-index" id="trackIndex">— / —</div>
+  </div>
+
+  <!-- EQ bars -->
+  <div class="eq-wrap paused" id="eqWrap">
+    <div class="eq-bar" style="height:20px; animation-duration:0.5s;"></div>
+    <div class="eq-bar" style="height:26px; animation-duration:0.4s; animation-delay:0.1s;"></div>
+    <div class="eq-bar" style="height:22px; animation-duration:0.6s; animation-delay:0.05s;"></div>
+    <div class="eq-bar" style="height:28px; animation-duration:0.45s; animation-delay:0.2s;"></div>
+    <div class="eq-bar" style="height:18px; animation-duration:0.55s; animation-delay:0.15s;"></div>
+    <div class="eq-bar" style="height:24px; animation-duration:0.5s; animation-delay:0.25s;"></div>
+    <div class="eq-bar" style="height:20px; animation-duration:0.4s; animation-delay:0.1s;"></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="time-row">
+    <span id="currentTime">0:00</span>
+    <span id="totalTime">0:00</span>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="px-btn" id="prevBtn" title="Previous">⏮</button>
+    <button class="px-btn" id="rewBtn"  title="-10s">⏪</button>
+    <button class="px-btn play-pause" id="playBtn">▶</button>
+    <button class="px-btn" id="ffBtn"   title="+10s">⏩</button>
+    <button class="px-btn" id="nextBtn" title="Next">⏭</button>
+  </div>
+
+  <!-- Volume -->
+  <div class="volume-row">
+    <span class="vol-label">VOL</span>
+    <input type="range" class="vol-slider" id="volSlider" min="0" max="1" step="0.05" value="0.8">
+    <span class="vol-label">🔊</span>
+  </div>
+
+</div>
+
+<!-- ══ PLAYLIST ══ -->
+<div class="playlist-unit">
+  <div class="playlist-title">✿ PLAYLIST ✿</div>
+  <div class="playlist-box" id="playlistBox"></div>
+</div>
+
+<audio id="audioEl"></audio>
+
+<script>
+  // ═══════════════════════════════════════
+  // PLAYLIST — add your song filenames here
+  // ═══════════════════════════════════════
+  const SONGS = [
+    { title: 'Arerey Manasa', file: 'song1.mp3' },
+    { title: 'Raanjhanaa', file: 'song2.mp3' },
+    { title: 'SONG NAME 3', file: 'song3.mp3' },
+    { title: 'SONG NAME 4', file: 'song4.mp3' },
+    { title: 'SONG NAME 5', file: 'song5.mp3' },
+  ];
+
+  // ─── Elements ───
+  const audio       = document.getElementById('audioEl');
+  const playBtn     = document.getElementById('playBtn');
+  const prevBtn     = document.getElementById('prevBtn');
+  const nextBtn     = document.getElementById('nextBtn');
+  const rewBtn      = document.getElementById('rewBtn');
+  const ffBtn       = document.getElementById('ffBtn');
+  const volSlider   = document.getElementById('volSlider');
+  const progressFill= document.getElementById('progressFill');
+  const progressWrap= document.getElementById('progressWrap');
+  const currentTimeEl = document.getElementById('currentTime');
+  const totalTimeEl   = document.getElementById('totalTime');
+  const trackName   = document.getElementById('trackName');
+  const trackIndex  = document.getElementById('trackIndex');
+  const discRing    = document.getElementById('discRing');
+  const eqWrap      = document.getElementById('eqWrap');
+  const playlistBox = document.getElementById('playlistBox');
+
+  let currentIdx = -1;
+  let isPlaying  = false;
+
+  // ─── Helpers ───
+  function fmt(s) {
+    if (!s || isNaN(s)) return '0:00';
+    return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+  }
+
+  function setPlaying(state) {
+    isPlaying = state;
+    playBtn.textContent = state ? '⏸' : '▶';
+    discRing.classList.toggle('playing', state);
+    eqWrap.classList.toggle('paused', !state);
+  }
+
+  function loadTrack(idx, autoplay) {
+    if (idx < 0 || idx >= SONGS.length) return;
+    currentIdx = idx;
+    const s = SONGS[idx];
+    audio.src = s.file;
+    audio.load();
+    trackName.textContent  = s.title;
+    trackIndex.textContent = `${idx+1} / ${SONGS.length}`;
+    progressFill.style.width = '0%';
+    currentTimeEl.textContent = '0:00';
+    totalTimeEl.textContent   = '0:00';
+    renderPlaylist();
+    if (autoplay) audio.play().then(() => setPlaying(true)).catch(()=>{});
+  }
+
+  // ─── Playlist render ───
+  function renderPlaylist() {
+    playlistBox.innerHTML = '';
+    SONGS.forEach((s, i) => {
+      const row = document.createElement('div');
+      row.className = 'playlist-item' + (i === currentIdx ? ' active' : '');
+
+      row.innerHTML = `
+        <div class="track-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="track-info">
+          <div class="track-title">${s.title}</div>
+        </div>
+        <div class="track-dur" id="dur-${i}">--:--</div>
+        <div class="playing-ind">
+          <div class="ind-bar" style="height:6px;animation-duration:0.5s;"></div>
+          <div class="ind-bar" style="height:10px;animation-duration:0.4s;"></div>
+          <div class="ind-bar" style="height:7px;animation-duration:0.6s;"></div>
+        </div>
+      `;
+
+      row.addEventListener('click', () => loadTrack(i, true));
+      playlistBox.appendChild(row);
+
+      // Preload duration
+      const tmp = new Audio(s.file);
+      tmp.addEventListener('loadedmetadata', () => {
+        const el = document.getElementById(`dur-${i}`);
+        if (el) el.textContent = fmt(tmp.duration);
+      });
+    });
+  }
+
+  // ─── Controls ───
+  playBtn.addEventListener('click', () => {
+    if (currentIdx === -1) { loadTrack(0, true); return; }
+    if (isPlaying) { audio.pause(); setPlaying(false); }
+    else           { audio.play().then(() => setPlaying(true)).catch(()=>{}); }
+  });
+
+  prevBtn.addEventListener('click', () => {
+    loadTrack((currentIdx - 1 + SONGS.length) % SONGS.length, true);
+  });
+
+  nextBtn.addEventListener('click', () => {
+    loadTrack((currentIdx + 1) % SONGS.length, true);
+  });
+
+  rewBtn.addEventListener('click', () => { audio.currentTime = Math.max(0, audio.currentTime - 10); });
+  ffBtn.addEventListener('click',  () => { audio.currentTime = Math.min(audio.duration||0, audio.currentTime + 10); });
+
+  volSlider.addEventListener('input', e => { audio.volume = parseFloat(e.target.value); });
+
+  // ─── Progress ───
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    progressFill.style.width = pct + '%';
+    currentTimeEl.textContent = fmt(audio.currentTime);
+    totalTimeEl.textContent   = fmt(audio.duration);
+  });
+
+  progressWrap.addEventListener('click', e => {
+    if (!audio.duration) return;
+    const rect = progressWrap.getBoundingClientRect();
+    audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+  });
+
+  audio.addEventListener('ended', () => {
+    loadTrack((currentIdx + 1) % SONGS.length, true);
+  });
+
+  audio.addEventListener('play',  () => setPlaying(true));
+  audio.addEventListener('pause', () => setPlaying(false));
+
+  audio.volume = 0.8;
+
+  // Init playlist
+  renderPlaylist();
+</script>
+</body>
+</html>
