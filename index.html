@@ -42,12 +42,6 @@
   }
 
   /* Chunky pixel drop-shadow mixin via text-shadow */
-  /* .px-shadow-pink {
-  }
-
-  .px-shadow-gold {
-  } */
-
   /* ══════════════════════════════
      CORNER IMAGES — on-page, no border
   ══════════════════════════════ */
@@ -477,7 +471,7 @@
     const W = bed.offsetWidth || window.innerWidth;
     const sizes = [110, 130, 150, 130, 110, 150, 130];
     const stepX = 30;
-    const cols = Math.ceil(W / stepX) + 6;
+    const cols = Math.ceil(W / stepX) + 8;
 
     bed.innerHTML = '';
 
@@ -486,7 +480,8 @@
       const sizeIdx = i % sizes.length;
       const imgH = sizes[sizeIdx];
 
-      const x = i * stepX + (Math.random() * 10 - 5);
+      // Start from -stepX so flowers begin off left edge — no gap
+      const x = (i * stepX) - stepX + (Math.random() * 8 - 4);
       const yOffset = Math.floor(Math.random() * 36);
 
       const item = document.createElement('div');

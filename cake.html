@@ -204,6 +204,9 @@
 </head>
 <body>
 
+<audio id="bdayMusic" loop>
+  <source src="birthday_music.mp3" type="audio/mpeg">
+</audio>
 <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
 
 <a href="index.html" class="back-btn">← BACK</a>
@@ -412,6 +415,13 @@
     }
 
     status.textContent = '✨ WISH MADE! ✨';
+
+    // Play birthday music
+    const music = document.getElementById('bdayMusic');
+    if (music) {
+      music.volume = 0.7;
+      music.play().catch(() => {});
+    }
 
     // Launch confetti
     launchConfetti();
