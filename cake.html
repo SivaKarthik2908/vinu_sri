@@ -1,4 +1,4 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -30,7 +30,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow-x: hidden;
     padding: 30px 20px;
   }
 
@@ -327,7 +327,7 @@
     alt="Birthday Cake with Candles"
     onerror="this.style.display='none'; document.getElementById('cakeFallback').style.display='flex';">
   <div class="cake-placeholder" id="cakeFallback" style="display:none;">
-    <!-- <div class="cake-placeholder-icon" id="cakeEmoji"></div> -->
+    <div class="cake-placeholder-icon" id="cakeEmoji">🎂</div>
     <div class="cake-placeholder-text">ADD cake_candles.png<br>& cake_no_candles.png</div>
   </div>
 </div>
@@ -335,7 +335,7 @@
 <div class="status-text" id="statusText">PRESS BLOW TO MAKE A WISH!</div>
 
 <button class="blow-btn" id="blowBtn" onclick="blowCandles()">
-   BLOW!
+  💨 BLOW!
 </button>
 
 <div class="wish-text" id="wishText">
@@ -358,7 +358,7 @@
       <div class="cry-mouth"></div>
     </div>
   </div>
-  <div class="cry-label">I'M SO SORRY...</div>
+  <div class="cry-label">I'M SO SORRY...<br>TAP TO SEE WHY 😢</div>
 </a>
 
 <script>
