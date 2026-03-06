@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Make a Wish!</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<title>Make a Wish! 🎂</title>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; image-rendering: pixelated; }
 
@@ -25,7 +25,7 @@
       linear-gradient(90deg, rgba(232,115,154,0.07) 1px, transparent 1px);
     background-size: 16px 16px;
     min-height: 100vh;
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Silkscreen', monospace;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,7 +38,7 @@
   .back-btn {
     position: fixed;
     top: 18px; left: 18px;
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Silkscreen', monospace;
     font-size: 0.5rem;
     color: var(--deep-pink);
     text-decoration: none;
@@ -59,7 +59,6 @@
   .page-title {
     font-size: clamp(0.6rem, 2vw, 1rem);
     color: var(--deep-pink);
-    text-shadow: 3px 3px 0 #b03060;
     margin-bottom: 30px;
     letter-spacing: 0.1em;
     text-align: center;
@@ -130,7 +129,6 @@
   .status-text {
     font-size: clamp(0.45rem, 1.5vw, 0.65rem);
     color: var(--text-dark);
-    text-shadow: 1px 1px 0 rgba(176,48,96,0.3);
     margin-bottom: 24px;
     letter-spacing: 0.1em;
     text-align: center;
@@ -140,7 +138,7 @@
 
   /* ── BLOW BUTTON ── */
   .blow-btn {
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Silkscreen', monospace;
     font-size: clamp(0.55rem, 1.5vw, 0.8rem);
     color: #fff0f8;
     background: var(--deep-pink);
@@ -154,7 +152,6 @@
     box-shadow: 5px 5px 0 #4a0820;
     letter-spacing: 0.1em;
     transition: transform 0.1s steps(1), box-shadow 0.1s steps(1);
-    text-shadow: 2px 2px 0 #7a1040;
     opacity: 0;
     animation: fadeIn 0.5s steps(1) 0.8s forwards;
     position: relative;
@@ -185,7 +182,6 @@
     margin-top: 20px;
     font-size: clamp(0.4rem, 1.2vw, 0.6rem);
     color: var(--gold);
-    text-shadow: 2px 2px 0 #a07820;
     letter-spacing: 0.12em;
     text-align: center;
     line-height: 2.2;
@@ -221,7 +217,7 @@
     alt="Birthday Cake with Candles"
     onerror="this.style.display='none'; document.getElementById('cakeFallback').style.display='flex';">
   <div class="cake-placeholder" id="cakeFallback" style="display:none;">
-    <!-- <div class="cake-placeholder-icon" id="cakeEmoji"></div> -->
+    <div class="cake-placeholder-icon" id="cakeEmoji">🎂</div>
     <div class="cake-placeholder-text">ADD cake_candles.png<br>& cake_no_candles.png</div>
   </div>
 </div>
