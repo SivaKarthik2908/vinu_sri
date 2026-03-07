@@ -254,6 +254,116 @@
   }
 
   .home-btn:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 #4a0820; }
+
+  /* ── VOICE NOTE PLAYER ── */
+  .vn-wrap {
+    width: 100%;
+    background: var(--white);
+    border-top: 4px solid #ffd6e7;
+    border-left: 4px solid #ffd6e7;
+    border-right: 4px solid var(--btn-shadow);
+    border-bottom: 4px solid var(--btn-shadow);
+    box-shadow: 5px 5px 0 #7a1040;
+    padding: 14px 16px;
+    opacity: 0;
+    animation: pixelIn 0.4s steps(1) 1.0s forwards;
+  }
+
+  .vn-label {
+    font-size: 0.42rem;
+    color: var(--deep-pink);
+    letter-spacing: 0.15em;
+    border-bottom: 2px solid #f4c8d8;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+  }
+
+  .vn-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .vn-play-btn {
+    font-family: 'Silkscreen', monospace;
+    font-size: 1rem;
+    color: var(--white);
+    background: var(--deep-pink);
+    border: none;
+    width: 44px; height: 44px;
+    flex-shrink: 0;
+    cursor: pointer;
+    border-top: 3px solid #f4a7c3;
+    border-left: 3px solid #f4a7c3;
+    border-right: 3px solid #7a1040;
+    border-bottom: 3px solid #7a1040;
+    box-shadow: 3px 3px 0 #4a0820;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.1s steps(1), box-shadow 0.1s steps(1);
+  }
+
+  .vn-play-btn:hover { transform: translate(2px,2px); box-shadow: 1px 1px 0 #4a0820; }
+  .vn-play-btn:active { transform: translate(3px,3px); box-shadow: none; }
+
+  .vn-progress-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .vn-bar {
+    height: 10px;
+    background: #f4c8d8;
+    border-top: 2px solid #b03060;
+    border-left: 2px solid #b03060;
+    border-right: 2px solid #ffd6e7;
+    border-bottom: 2px solid #ffd6e7;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .vn-fill {
+    height: 100%;
+    width: 0%;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--deep-pink) 0px, var(--deep-pink) 5px,
+      var(--hot-pink) 5px, var(--hot-pink) 10px
+    );
+    transition: width 0.2s linear;
+    pointer-events: none;
+  }
+
+  .vn-time {
+    font-size: 0.35rem;
+    color: var(--deep-pink);
+    letter-spacing: 0.1em;
+    text-align: right;
+  }
+
+  /* waveform dots — decorative */
+  .vn-wave {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: 8px;
+  }
+
+  .vn-dot {
+    width: 4px;
+    background: var(--hot-pink);
+    border-radius: 0;
+    animation: waveDot 0.6s steps(3) infinite;
+    opacity: 0.5;
+  }
+
+  .vn-wrap.playing .vn-dot { opacity: 1; }
+
+  @keyframes waveDot {
+    0%,100% { transform: scaleY(0.3); }
+    50%      { transform: scaleY(1); }
+  }
 </style>
 </head>
 <body>
@@ -276,6 +386,21 @@
     <div class="sweat"></div>
   </div>
 
+  <!-- Voice note -->
+  <div class="vn-wrap" id="vnWrap">
+    <div class="vn-label">💌 KARTHIK'S VOICE — HEAR HIM OUT</div>
+    <div class="vn-wave" id="vnWave"></div>
+    <div class="vn-controls">
+      <button class="vn-play-btn" id="vnPlayBtn">▶</button>
+      <div class="vn-progress-wrap">
+        <div class="vn-bar" id="vnBar">
+          <div class="vn-fill" id="vnFill"></div>
+        </div>
+        <div class="vn-time" id="vnTime">0:00 / 0:00</div>
+      </div>
+    </div>
+  </div>
+
   <div class="note-frame">
     <p class="apology-text">Vinu,
 
@@ -286,5 +411,69 @@ I am typing and putting this up incase you couldn't understand my handwriting in
   <a href="index.html" class="home-btn">♥ GO BACK HOME</a>
 
 </div>
-</body>
-</html>
+
+<audio id="vnAudio">
+  <source src="vn.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const audio   = document.getElementById('vnAudio');
+  const playBtn = document.getElementById('vnPlayBtn');
+  const fill    = document.getElementById('vnFill');
+  const timeEl  = document.getElementById('vnTime');
+  const bar     = document.getElementById('vnBar');
+  const wrap    = document.getElementById('vnWrap');
+  const wave    = document.getElementById('vnWave');
+
+  // Build decorative waveform dots
+  const heights = [6,10,16,8,20,12,18,8,14,20,10,16,6,12,18,10,20,8,14,6,18,12,16,10,20];
+  heights.forEach((h, i) => {
+    const d = document.createElement('div');
+    d.className = 'vn-dot';
+    d.style.height = h + 'px';
+    d.style.animationDelay = (i * 0.04) + 's';
+    d.style.animationDuration = (0.4 + (i % 4) * 0.1) + 's';
+    wave.appendChild(d);
+  });
+
+  function fmt(s) {
+    if (!s || isNaN(s)) return '0:00';
+    return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+  }
+
+  playBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play().catch(() => {});
+    } else {
+      audio.pause();
+    }
+  });
+
+  audio.addEventListener('play', () => {
+    playBtn.textContent = '⏸';
+    wrap.classList.add('playing');
+  });
+
+  audio.addEventListener('pause', () => {
+    playBtn.textContent = '▶';
+    wrap.classList.remove('playing');
+  });
+
+  audio.addEventListener('ended', () => {
+    playBtn.textContent = '▶';
+    wrap.classList.remove('playing');
+    fill.style.width = '0%';
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    fill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+    timeEl.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+  });
+
+  bar.addEventListener('click', e => {
+    if (!audio.duration) return;
+    const rect = bar.getBoundingClientRect();
+    audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+  });
+</script>
